@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BlockRGB from "./components/BlockRGB";
 import { useState } from "react";
+import DetailsScreen from "./screens/DetailsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -12,16 +13,24 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Details" component={DetailsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-function HomeScreen() {
+function HomeScreen({ navigation }) {
   const [colors, setColors] = useState([]);
 
   function renderItem({ item }) {
-    return <BlockRGB red={item.red} green={item.green} blue={item.blue} />;
+    return (
+      <Pressable
+        onPress={() => {
+          navigation.navigate("Details", { ...item });
+        }}>
+        <BlockRGB red={item.red} green={item.green} blue={item.blue} />
+      </Pressable>
+    );
   }
 
   function addColor() {
