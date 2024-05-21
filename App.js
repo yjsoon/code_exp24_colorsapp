@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BlockRGB from "./components/BlockRGB";
@@ -18,18 +18,47 @@ export default function App() {
 }
 
 function HomeScreen() {
-  const [colors, setColors] = useState([
-    { red: 255, green: 255, blue: 0, id: "0" },
-    { red: 255, green: 0, blue: 255, id: "1" },
-    { red: 100, green: 255, blue: 100, id: "2" }
-  ]);
+  const [colors, setColors] = useState([]);
 
   function renderItem({ item }) {
     return <BlockRGB red={item.red} green={item.green} blue={item.blue} />;
   }
 
+  function addColor() {
+    setColors([
+      {
+        red: Math.floor(Math.random() * 255),
+        green: Math.floor(Math.random() * 255),
+        blue: Math.floor(Math.random() * 255),
+        id: Math.random().toString()
+      },
+      ...colors // spread and copy the colors array
+    ]);
+  }
+
   return (
     <View style={styles.container}>
+      <Pressable
+        style={{
+          height: 40,
+          justifyContent: "center",
+          width: "100%",
+          alignItems: "center"
+        }}
+        onPress={addColor}>
+        <Text style={{ color: "red", fontWeight: "bold" }}>Add a color</Text>
+      </Pressable>
+      <Pressable
+        style={{
+          height: 40,
+          justifyContent: "center",
+          width: "100%",
+          alignItems: "center"
+        }}
+        onPress={() => setColors([])}>
+        <Text style={{ color: "blue", fontWeight: "bold" }}>Reset</Text>
+      </Pressable>
+
       <FlatList style={styles.list} data={colors} renderItem={renderItem} />
     </View>
   );
